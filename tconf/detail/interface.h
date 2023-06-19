@@ -13,8 +13,8 @@
 // limitations under the License.
 //
 
-#ifndef TCONF_SFUN_INTERFACE_H
-#define TCONF_SFUN_INTERFACE_H
+#ifndef TCONF_DETAIL_INTERFACE_H_
+#define TCONF_DETAIL_INTERFACE_H_
 
 #include <type_traits>
 
@@ -70,4 +70,4 @@ namespace tconf::sfun {
 
 } //namespace tconf::sfun
 
-#endif //TCONF_SFUN_INTERFACE_H
+#endif // TCONF_DETAIL_INTERFACE_H_
