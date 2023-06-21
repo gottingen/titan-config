@@ -139,9 +139,10 @@ namespace test_nodeparser {
     })");
                 },
                 [](const tconf::ConfigError &e) {
+                    std::cout<<(e.what())<<std::endl;
                     REQUIRE_EQ(
                             std::string{e.what()},
-                            "Expected name separator ':' at line 3 and column 15");
+                            "[line:3, column:16] Syntax error while parsing object separator - invalid literal; last read: '\"bar\" te'; expected ':'");
                 });
     }
 

@@ -26,6 +26,8 @@ foreach (JEX ${SRC})
             ${JEX_E}
             SOURCES
             ${JEX}
+            COPTS
+            ${CARBIN_CXX_OPTIONS}
             DEPS
             tconf::tconf
     )

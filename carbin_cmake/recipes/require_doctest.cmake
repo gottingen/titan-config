@@ -1,4 +1,3 @@
-#
 # Copyright 2023 The Carbin Authors.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -14,10 +13,9 @@
 # limitations under the License.
 #
 
-set(CARBIN_SYSTEM_DYLINK)
-if (APPLE)
-    find_library(CoreFoundation CoreFoundation)
-    list(APPEND CARBIN_SYSTEM_DYLINK ${CoreFoundation} pthread)
-elseif (${CMAKE_SYSTEM_NAME} STREQUAL "Linux")
-    list(APPEND CARBIN_SYSTEM_DYLINK rt dl pthread)
-endif ()
+
+find_path(DOCTEST_INCLUDE_PATH NAMES doctest/doctest.h)
+include_directories(${DOCTEST_INCLUDE_PATH})
+if((NOT DOCTEST_INCLUDE_PATH))
+    carbin_error(FATAL_ERROR "Fail to find turbo")
+endif()

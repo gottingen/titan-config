@@ -15,32 +15,31 @@
 
 #include "json_parser.h"
 #include "tconf/errors.h"
-#include "jsoncons/json.hpp"
+#include "nlohmann/json.hpp"
 #include <regex>
 
 namespace tconf {
 
     namespace {
-        void parseJson(const jsoncons::json &json, tconf::TreeNode &node) {
-            for (auto &it: json.object_range()) {
-                if (it.value().is_object()) {
-                    auto &newNode = node.asItem().addNode(it.key());
-                    parseJson(it.value(), newNode);
-                } else if (it.value().is_array()) {
-                    if (!it.value().empty() && it.value().array_range().begin()->is_object()) {
-                        auto &newNode = node.asItem().addNodeList(it.key());
-                        for (auto &item: it.value().array_range())
+        void parseJson(const nlohmann::json &json, tconf::TreeNode &node) {
+            for (auto &[key, value]: json.items()) {
+                if (value.is_object()) {
+                    auto &newNode = node.asItem().addNode(key);
+                    parseJson(value, newNode);
+                } else if (value.is_array()) {
+                    if (!value.empty() && value.front().is_object()) {
+                        auto &newNode = node.asItem().addNodeList(key);
+                        for (auto &item: value)
                             parseJson(item, newNode.asList().addNode());
                     } else {
                         auto valuesList = std::vector<std::string>{};
-                        for (auto &item: it.value().array_range())
-                            valuesList.emplace_back(item.as_string());
+                        for (auto &item: value)
+                            valuesList.emplace_back(item.get<std::string>());
 
-                        node.asItem().addParamList(it.key(), valuesList);
+                        node.asItem().addParamList(key, valuesList);
                     }
-                } else {
-                    node.asItem().addParam(it.key(), it.value().as_string());
-                }
+                } else
+                    node.asItem().addParam(key, value.get<std::string>());
             }
         }
 
@@ -62,7 +61,7 @@ namespace tconf {
     } //namespace
 
     TreeNode JsonParser::parse(std::istream &stream) {
-        auto json = jsoncons::json{};
+        auto json = nlohmann::json{};
         try {
             stream >> json;
         }

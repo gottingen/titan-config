@@ -21,7 +21,7 @@ carbin_cc_library(
         SOURCES
         ${TCONF_SRC}
         COPTS
-        ${USER_CXX_FLAGS}
+        ${CARBIN_CXX_OPTIONS}
         DEPS
         ${CARBIN_DEPS_LINK}
         PUBLIC
